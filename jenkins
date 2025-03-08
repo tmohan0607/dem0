@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = 'SampleApp'
+        BUILD_DIR = 'build_output'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    echo 'Cloning the repository...'
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    echo 'Building the application...'
+                    sh 'mkdir -p $BUILD_DIR'
+                    sh 'touch $BUILD_DIR/$APP_NAME.jar'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    echo 'Running tests...'
+                    sh './run-tests.sh'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    echo 'Deploying the application...'
+                    sh './deploy.sh'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Please check the logs.'
+        }
+    }
+}
