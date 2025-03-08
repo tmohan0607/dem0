@@ -1,33 +1,25 @@
 pipeline {
-    agent any // Runs on any available Jenkins agent
-
-    stages {
-        stage('Checkout Code') {
+    agent any
+      stages {
+        stage ('Build') {
             steps {
-                echo 'Cloning repository...'
-                // Example: Cloning a Git repo (replace with your repo URL)
-                git 'https://github.com/example/your-repo.git'
+                echo 'Building the application...'
+                // sh 'mvn clean package' // Example for a Java project
             }
         }
 
-        stage('Build') {
-            steps {
-                echo 'Building the project...'
-
-            }
-        }
-
-        stage('Test') {
+        stage ('Test') {
             steps {
                 echo 'Running tests...'
-              }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the project...'
-            
+                // sh 'mvn test' 
             }
         }
-    }
+
+        stage ('Deploy') {
+            steps {
+                echo 'Deploying the application...'
+                // sh 'scp target/myapp.jar user@server:/path/to/deploy'
+            }
+        }
+    }
 }
